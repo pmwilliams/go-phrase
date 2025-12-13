@@ -6,6 +6,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: black;
+  min-height: 100dvh;
 }
 
 code {
@@ -14,68 +15,75 @@ code {
 }
 
 .App {
-  margin-top: 10%;
-  gap: 50px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-around;
+  min-height: 100dvh; 
 }
 
 .start-button, 
 .stop-button {
-  width: 60%;
+  height: 20dvh;
   aspect-ratio: 1;
   border-radius: 50%;
   display: grid;
   place-items: center;
   background-color: black;
-  font-size: 32px;
+  font-size: 24px;
   font-weight: 500;
   text-align: center;
 }
 
 .start-button {
-  border: 10px solid #73F527;
+  border: 5px solid #73F527;
   color: #73F527;
 }
 
 .stop-button {
-  border: 10px solid #F52761;
+  border: 5px solid #F52761;
   color: #F52761;
 }
 
-.action-buttons {
-  display: flex;
-  width: 20vh;
-  gap: 20px;
-  height: 5vh;
-}
-
 .action-button {
-  flex-grow: 1;
-  border-radius: 10px;
+  height: 30dvh;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
   background-color: black;
-  border: 3px solid #27EBF5;
+  font-size: 24px;
+  font-weight: 500;
+  text-align: center;
   color: #27EBF5;
-  display: inline-block;
+  border: 5px solid #27EBF5;
 }
 
 .action-button:disabled {
-  border: 3px solid grey;
+  border: 5px solid grey;
   color: grey;
 }
 
 .word,
 .word-hidden {
-  color: #156E5A;
-  font-size: 14px;
-  transition: background-color 0.5s;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color, color 0.5s;
+  min-width: 75vw;
+  max-width: 75vw;
+  line-height:1.5em;
+  min-height:3.0em;
+  vertical-align: middle;
+  border-bottom: 2px solid rgb(56, 155, 134);
 }
 
 .word {
-  background-color: rgba(21, 110, 90, 0)
+  background-color: rgba(21, 110, 90, 0);
+  color: rgba(21, 110, 90, 1);
 }
 
 .word-hidden {
-  background-color: rgba(21, 110, 90, 1);
+  background-color: rgba(21, 110, 90, 0.5);
+  color: rgba(21, 110, 90, 0);
 }

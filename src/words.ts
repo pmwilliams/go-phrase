@@ -212,4 +212,7 @@ const words = [
   "Room-service",
 ]
 
-export const getWord = () => words[Math.floor(Math.random() * words.length)]
+export const getWord = () => {
+  return words[Math.floor(Math.random() * words.length)]
+  // return "a very long word that may not fit very well in the space"
+}

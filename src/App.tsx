@@ -4,7 +4,7 @@ import './App.css';
 import { getWord } from './words';
 
 function App() {
-  const [word, setWord] = React.useState("")
+  const [word, setWord] = React.useState("word")
   const [showWord, setShowWord] = React.useState(false)
   const [nextBeep, setNextBeep] = React.useState(0)
   const audioContextRef = React.useRef<AudioContext | undefined>(undefined)
@@ -18,7 +18,18 @@ function App() {
   React.useEffect(() => {
     if ("wakeLock" in navigator) {
       navigator.wakeLock.request("screen")
-        .then((wakeLockSentinel) => wakeLock.current = wakeLockSentinel);
+        .then((wakeLockSentinel) => {
+          wakeLock.current = wakeLockSentinel
+          wakeLock.current.addEventListener("release", () => {
+            wakeLock.current = null
+          });
+        });
+
+      document.addEventListener("visibilitychange", async () => {
+        if (wakeLock.current !== null && document.visibilityState === "visible") {
+          wakeLock.current = await navigator.wakeLock.request("screen");
+        }
+      });
     }
     return () => {
       if (wakeLock.current) {
@@ -104,7 +115,10 @@ function App() {
     buzzerGainRef.current?.gain.linearRampToValueAtTime(0.5, context.currentTime + 0.05)
 
     setNextBeep(0)
-    navigator.vibrate(1500);
+
+    if ("vibrate" in navigator) {
+      navigator.vibrate(1500);
+    }
 
     setTimeout(() => {
       buzzerGainRef.current?.gain.linearRampToValueAtTime(0, context.currentTime + 0.05)
@@ -127,18 +141,16 @@ function App() {
         className={isPlaying ? 'stop-button' : 'start-button'}
         onClick={() => isPlaying ? stop() : start()}
       >
-          {isPlaying ? 'STOP' : 'START'}
+          {isPlaying ? 'Stop' : 'Start'}
       </button>
 
-      <div className="action-buttons">
-        <button
-          className="action-button"
-          disabled={!isPlaying}
-          onClick={() => skip()}
-        >
-          Next
-        </button>
-      </div>
+      <button
+        className="action-button"
+        disabled={!isPlaying}
+        onClick={() => skip()}
+      >
+        Next
+      </button>
 
       <div 
         className={showWord ? 'word' : 'word-hidden'}
