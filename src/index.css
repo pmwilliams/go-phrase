@@ -1,0 +1,81 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: black;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.App {
+  margin-top: 10%;
+  gap: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.start-button, 
+.stop-button {
+  width: 60%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background-color: black;
+  font-size: 32px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.start-button {
+  border: 10px solid #73F527;
+  color: #73F527;
+}
+
+.stop-button {
+  border: 10px solid #F52761;
+  color: #F52761;
+}
+
+.action-buttons {
+  display: flex;
+  width: 20vh;
+  gap: 20px;
+  height: 5vh;
+}
+
+.action-button {
+  flex-grow: 1;
+  border-radius: 10px;
+  background-color: black;
+  border: 3px solid #27EBF5;
+  color: #27EBF5;
+  display: inline-block;
+}
+
+.action-button:disabled {
+  border: 3px solid grey;
+  color: grey;
+}
+
+.word,
+.word-hidden {
+  color: #156E5A;
+  font-size: 14px;
+  transition: background-color 0.5s;
+}
+
+.word {
+  background-color: rgba(21, 110, 90, 0)
+}
+
+.word-hidden {
+  background-color: rgba(21, 110, 90, 1);
+}
