@@ -104,6 +104,7 @@ function App() {
     buzzerGainRef.current?.gain.linearRampToValueAtTime(0.5, context.currentTime + 0.05)
 
     setNextBeep(0)
+    navigator.vibrate(1500);
 
     setTimeout(() => {
       buzzerGainRef.current?.gain.linearRampToValueAtTime(0, context.currentTime + 0.05)
