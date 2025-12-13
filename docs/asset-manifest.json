@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/go-phrase/static/css/main.68b6821d.css",
+    "main.js": "/go-phrase/static/js/main.ba581fe0.js",
+    "static/js/453.df7e1c7d.chunk.js": "/go-phrase/static/js/453.df7e1c7d.chunk.js",
+    "index.html": "/go-phrase/index.html",
+    "main.68b6821d.css.map": "/go-phrase/static/css/main.68b6821d.css.map",
+    "main.ba581fe0.js.map": "/go-phrase/static/js/main.ba581fe0.js.map",
+    "453.df7e1c7d.chunk.js.map": "/go-phrase/static/js/453.df7e1c7d.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.68b6821d.css",
+    "static/js/main.ba581fe0.js"
+  ]
+}
