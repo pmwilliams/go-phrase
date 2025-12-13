@@ -11,10 +11,25 @@ function App() {
   const oscillatorGainRef = React.useRef<GainNode | undefined>(undefined)
   const buzzerGainRef = React.useRef<GainNode | undefined>(undefined)
   const factor = React.useRef<number>(0)
+  const wakeLock = React.useRef<WakeLockSentinel>(null)
 
   const isPlaying = nextBeep > 100
 
-  const start = () => {
+  React.useEffect(() => {
+    if ("wakeLock" in navigator) {
+      navigator.wakeLock.request("screen")
+        .then((wakeLockSentinel) => wakeLock.current = wakeLockSentinel);
+    }
+    return () => {
+      if (wakeLock.current) {
+        wakeLock.current.release().then(() => {
+          wakeLock.current = null;
+        });
+      }
+    }   
+  }, [])
+
+  const start = async () => {
     const context = new AudioContext()
 
     const gainNode = context.createGain();
