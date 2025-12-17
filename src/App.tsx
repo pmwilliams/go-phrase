@@ -7,11 +7,15 @@ function App() {
   const [word, setWord] = React.useState("word")
   const [showWord, setShowWord] = React.useState(false)
   const [nextBeep, setNextBeep] = React.useState(0)
+  const [isStartStopping, setIsStartStopping] = React.useState(false)
+  
   const audioContextRef = React.useRef<AudioContext | undefined>(undefined)
   const oscillatorGainRef = React.useRef<GainNode | undefined>(undefined)
   const buzzerGainRef = React.useRef<GainNode | undefined>(undefined)
   const factor = React.useRef<number>(0)
   const wakeLock = React.useRef<WakeLockSentinel>(null)
+  const revealTimeout = React.useRef<ReturnType<typeof setTimeout>>(null)
+  const startStopTimeout = React.useRef<ReturnType<typeof setTimeout>>(null)
 
   const isPlaying = nextBeep > 100
 
@@ -82,7 +86,8 @@ function App() {
   const reveal = () => {
     setShowWord(true)
 
-    setTimeout(() => setShowWord(false), 2000)
+    revealTimeout.current && clearTimeout(revealTimeout.current)
+    revealTimeout.current = setTimeout(() => setShowWord(false), 2000)
   }
 
   const skip = () => {
@@ -125,6 +130,21 @@ function App() {
     }, 1500)
   }, [])
 
+  const onStartStopDown = () => {
+    setIsStartStopping(true)
+    startStopTimeout.current = setTimeout(() => {
+      isPlaying ? stop() : start()
+      setIsStartStopping(false)
+    }, 1000)
+  }
+
+  const onStartStopUp = () => {
+    setIsStartStopping(false)
+    if (startStopTimeout.current) {
+      clearTimeout(startStopTimeout.current)
+    }
+  }
+
   React.useEffect(() => {
     if (isPlaying)
     {
@@ -135,11 +155,21 @@ function App() {
     }
   }, [nextBeep, beep, buzz, isPlaying])
 
+  const startButtonStyle = [
+    isPlaying ? 'stop-button' : 'start-button', 
+    isStartStopping ? 'start-stopping' : ''
+  ].join(' ')
+
   return (
-    <div className="App">
+    <div 
+      className="App">
       <button
-        className={isPlaying ? 'stop-button' : 'start-button'}
-        onClick={() => isPlaying ? stop() : start()}
+        className={startButtonStyle}
+        onMouseDown={onStartStopDown}
+        onTouchStart={onStartStopDown}
+        onMouseUp={onStartStopUp}
+        onMouseLeave={onStartStopUp}
+        onTouchEnd={onStartStopUp}
       >
           {isPlaying ? 'Stop' : 'Start'}
       </button>
