@@ -2,77 +2,39 @@ import React from 'react';
 
 import './App.css';
 import { getWord } from './words';
+import { TouchButton } from './components/TouchButton/TouchButton';
+
+import styles from './App.module.css'
+import { useWakeLock } from './hooks/useWakeLock';
+import { useBeep } from './hooks/useBeep';
+import { useVibrate } from './hooks/useVibrate';
+import { WordPanel } from './components/WordPanel/WordPanel';
 
 function App() {
   const [word, setWord] = React.useState("word")
-  const [showWord, setShowWord] = React.useState(false)
   const [nextBeep, setNextBeep] = React.useState(0)
-  const [isStartStopping, setIsStartStopping] = React.useState(false)
   
-  const audioContextRef = React.useRef<AudioContext | undefined>(undefined)
-  const oscillatorGainRef = React.useRef<GainNode | undefined>(undefined)
-  const buzzerGainRef = React.useRef<GainNode | undefined>(undefined)
   const factor = React.useRef<number>(0)
-  const wakeLock = React.useRef<WakeLockSentinel>(null)
-  const revealTimeout = React.useRef<ReturnType<typeof setTimeout>>(null)
-  const startStopTimeout = React.useRef<ReturnType<typeof setTimeout>>(null)
+
+  const beepRef = React.useRef<ReturnType<typeof useBeep>>(null)
+  const buzzRef = React.useRef<ReturnType<typeof useBeep>>(null)
+  const vibrate = React.useRef<ReturnType<typeof useVibrate>>(null)
 
   const isPlaying = nextBeep > 100
 
-  React.useEffect(() => {
-    if ("wakeLock" in navigator) {
-      navigator.wakeLock.request("screen")
-        .then((wakeLockSentinel) => {
-          wakeLock.current = wakeLockSentinel
-          wakeLock.current.addEventListener("release", () => {
-            wakeLock.current = null
-          });
-        });
+  useWakeLock()
 
-      document.addEventListener("visibilitychange", async () => {
-        if (wakeLock.current !== null && document.visibilityState === "visible") {
-          wakeLock.current = await navigator.wakeLock.request("screen");
-        }
-      });
-    }
-    return () => {
-      if (wakeLock.current) {
-        wakeLock.current.release().then(() => {
-          wakeLock.current = null;
-        });
-      }
-    }   
-  }, [])
+  beepRef.current = useBeep()
+  buzzRef.current = useBeep()
+  vibrate.current = useVibrate()
 
   const start = async () => {
     const context = new AudioContext()
 
-    const gainNode = context.createGain();
-    gainNode.connect(context.destination);
-    gainNode.gain.setValueAtTime(0, context.currentTime);
-    
-    const oscillator = context.createOscillator()
-
-    oscillator.frequency.setValueAtTime(1000, context.currentTime)
-    oscillator.connect(gainNode)
-    oscillator.start()
-
-    const buzzerGainNode = context.createGain();
-    buzzerGainNode.connect(context.destination);
-    buzzerGainNode.gain.setValueAtTime(0, context.currentTime);
-    
-    const buzzer = context.createOscillator()
-
-    buzzer.frequency.setValueAtTime(100, context.currentTime)
-    buzzer.type = "sawtooth"
-    buzzer.connect(buzzerGainNode)
-    buzzer.start()
+    beepRef.current?.initBeep(context)
+    buzzRef.current?.initBeep(context, 100, 'sawtooth')
 
     setNextBeep(1500)
-
-    audioContextRef.current = context
-    oscillatorGainRef.current = gainNode
-    buzzerGainRef.current = buzzerGainNode
 
     factor.current = 0.945 + Math.random() * 0.03
 
@@ -83,67 +45,31 @@ function App() {
     setNextBeep(0)
   }
 
-  const reveal = () => {
-    setShowWord(true)
-
-    revealTimeout.current && clearTimeout(revealTimeout.current)
-    revealTimeout.current = setTimeout(() => setShowWord(false), 2000)
-  }
-
   const skip = () => {
     setWord(getWord())
-    reveal()
   }
 
   const beep = React.useCallback(() => {
-    const context = audioContextRef.current
-
-    if (!context) {
-      return
-    }
-    
-    oscillatorGainRef.current?.gain.linearRampToValueAtTime(1, context.currentTime + 0.05)
+    beepRef.current?.beepStart()
 
     setTimeout(() => {
-      oscillatorGainRef.current?.gain.linearRampToValueAtTime(0, context.currentTime + 0.05)
+      beepRef.current?.beepStop()
       setNextBeep(currentBeep => currentBeep * factor.current)
     }, 100)
   }, [setNextBeep])
 
   const buzz = React.useCallback(() => {
-    const context = audioContextRef.current
-
-    if (!context) {
-      return
-    }
-    
-    buzzerGainRef.current?.gain.linearRampToValueAtTime(0.5, context.currentTime + 0.05)
+    buzzRef.current?.beepStart()
 
     setNextBeep(0)
 
-    if ("vibrate" in navigator) {
-      navigator.vibrate(1500);
-    }
+    vibrate.current?.forDuration(1500)
 
     setTimeout(() => {
-      buzzerGainRef.current?.gain.linearRampToValueAtTime(0, context.currentTime + 0.05)
+      buzzRef.current?.beepStop()
+      buzzRef.current?.destroy()
     }, 1500)
   }, [])
-
-  const onStartStopDown = () => {
-    setIsStartStopping(true)
-    startStopTimeout.current = setTimeout(() => {
-      isPlaying ? stop() : start()
-      setIsStartStopping(false)
-    }, 1000)
-  }
-
-  const onStartStopUp = () => {
-    setIsStartStopping(false)
-    if (startStopTimeout.current) {
-      clearTimeout(startStopTimeout.current)
-    }
-  }
 
   React.useEffect(() => {
     if (isPlaying)
@@ -152,42 +78,35 @@ function App() {
     }
     else if (nextBeep) {
       buzz()
+      beepRef.current?.destroy()
     }
   }, [nextBeep, beep, buzz, isPlaying])
-
-  const startButtonStyle = [
-    isPlaying ? 'stop-button' : 'start-button', 
-    isStartStopping ? 'start-stopping' : ''
-  ].join(' ')
 
   return (
     <div 
       className="App">
-      <button
-        className={startButtonStyle}
-        onMouseDown={onStartStopDown}
-        onTouchStart={onStartStopDown}
-        onMouseUp={onStartStopUp}
-        onMouseLeave={onStartStopUp}
-        onTouchEnd={onStartStopUp}
-      >
-          {isPlaying ? 'Stop' : 'Start'}
-      </button>
+      <TouchButton 
+        label={isPlaying ? 'Stop' : 'Start'}
+        onPress={() => isPlaying ? stop() : start()}
+        theme={{
+          button: isPlaying ? styles.stopButton : styles.startButton,
+          pressing: isPlaying ? styles.stopButtonPressed : styles.startButtonPressed
+        }}
+      />
 
-      <button
-        className="action-button"
+      <TouchButton
         disabled={!isPlaying}
-        onClick={() => skip()}
-      >
-        Next
-      </button>
+        label="Next"
+        onPress={() => skip()}
+        theme={{
+          button: styles.nextButton,
+          pressing: styles.nextButtonPressed
+        }}
+      />
 
-      <div 
-        className={showWord ? 'word' : 'word-hidden'}
-        onClick={() => reveal()}
-      >
-        {word}
-      </div>
+      <WordPanel
+        disabled={!isPlaying}
+        word={word}/>
     </div>
   );
 }

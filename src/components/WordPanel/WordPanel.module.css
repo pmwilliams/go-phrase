@@ -1,0 +1,27 @@
+.word {
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  transition: background-color, color 0.5s;
+  min-width: 75vw;
+  max-width: 75vw;
+  line-height:1.5em;
+  min-height:3.0em;
+  vertical-align: middle;
+  border: none;
+  border-bottom: 2px solid rgb(56, 155, 134);
+}
+
+.word:disabled {
+  visibility: hidden;
+}
+
+.word {
+  background-color: rgba(21, 110, 90, 0);
+  color: rgba(21, 110, 90, 1);
+}
+
+.hidden {
+  background-color: rgba(21, 110, 90, 0.5);
+  color: rgba(21, 110, 90, 0);
+}
