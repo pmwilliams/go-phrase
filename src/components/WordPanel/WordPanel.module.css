@@ -2,7 +2,7 @@
   border-radius: 10px;
   font-size: 18px;
   font-weight: bold;
-  transition: background-color, color 0.5s;
+  transition: background-color, color 0.3s;
   min-width: 75vw;
   max-width: 75vw;
   line-height:1.5em;

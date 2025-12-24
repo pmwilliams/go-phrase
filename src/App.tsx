@@ -16,6 +16,7 @@ function App() {
   
   const factor = React.useRef<number>(0)
 
+  const nextBeepRef = React.useRef<ReturnType<typeof setTimeout>>(null)
   const beepRef = React.useRef<ReturnType<typeof useBeep>>(null)
   const buzzRef = React.useRef<ReturnType<typeof useBeep>>(null)
   const vibrate = React.useRef<ReturnType<typeof useVibrate>>(null)
@@ -43,6 +44,10 @@ function App() {
 
   const stop = () => {
     setNextBeep(0)
+
+    if (nextBeepRef.current) {
+      clearTimeout(nextBeepRef.current)
+    }
   }
 
   const skip = () => {
@@ -74,7 +79,7 @@ function App() {
   React.useEffect(() => {
     if (isPlaying)
     {
-      setTimeout(() => beep(), nextBeep)
+      nextBeepRef.current = setTimeout(() => beep(), nextBeep)
     }
     else if (nextBeep) {
       buzz()
@@ -94,6 +99,10 @@ function App() {
         }}
       />
 
+      <WordPanel
+        disabled={!isPlaying}
+        word={word}/>
+
       <TouchButton
         disabled={!isPlaying}
         label="Next"
@@ -103,10 +112,6 @@ function App() {
           pressing: styles.nextButtonPressed
         }}
       />
-
-      <WordPanel
-        disabled={!isPlaying}
-        word={word}/>
     </div>
   );
 }
