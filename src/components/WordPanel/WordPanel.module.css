@@ -25,3 +25,10 @@
   background-color: rgba(21, 110, 90, 0.5);
   color: rgba(21, 110, 90, 0);
 }
+
+@media (orientation: landscape) {
+  .word {
+    min-width: 50vw;
+    max-width: 50vw;
+  }
+}

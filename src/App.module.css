@@ -9,8 +9,10 @@ button {
 }
 
 .startButton,
-.stopButton {
+.stopButton,
+.nextButton {
   height: 18dvh;
+  width: unset;
   aspect-ratio: 1;
   border-radius: 50%;
   display: grid;
@@ -19,8 +21,19 @@ button {
   font-size: 4dvh;
   font-weight: 500;
   text-align: center;
-  border: 1dvh solid #73F527;
-  color: #73F527;
+  border-width: 1dvh;
+  border-style: solid;
+}
+
+@media (orientation: landscape) {
+  .startButton,
+  .stopButton,
+  .nextButton {
+    height: unset;
+    width: 18dvw;
+    font-size: 4dvw;
+    border-width: 1dvw;
+  }
 }
 
 .startButton {
@@ -44,15 +57,6 @@ button {
 }
 
 .nextButton {
-  height: 18dvh;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background-color: black;
-  font-size: 4dvh;
-  font-weight: 500;
-  text-align: center;
   color: #27EBF5;
   border: 1dvh solid #27EBF5;
 }
