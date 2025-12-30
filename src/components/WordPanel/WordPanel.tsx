@@ -30,7 +30,7 @@ export function WordPanel({
       className={showWord ? styles.word : styles.word + ' ' + styles.hidden}
       onClick={() => reveal()}
     >
-      {word}
+      <span>{word}</span>
     </button>
   )
 }

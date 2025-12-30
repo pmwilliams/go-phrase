@@ -2,7 +2,6 @@
   border-radius: 10px;
   font-size: 18px;
   font-weight: bold;
-  transition: background-color, color 0.3s;
   min-width: 75vw;
   max-width: 75vw;
   line-height:1.5em;
@@ -10,6 +9,15 @@
   vertical-align: middle;
   border: none;
   border-bottom: 2px solid rgb(56, 155, 134);
+}
+
+.word span {
+  transition: 1s filter linear; 
+  -webkit-transition: 0.2s -webkit-filter linear;
+  -moz-transition: 0.2s -moz-filter linear;
+  -ms-transition: 0.2s -ms-filter linear;
+  -o-transition: 0.2s -o-filter linear;
+  filter: blur(0px);
 }
 
 .word:disabled {
@@ -21,9 +29,8 @@
   color: rgba(21, 110, 90, 1);
 }
 
-.hidden {
-  background-color: rgba(21, 110, 90, 0.5);
-  color: rgba(21, 110, 90, 0);
+.word.hidden span {
+  filter: blur(5px);
 }
 
 @media (orientation: landscape) {
