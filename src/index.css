@@ -30,7 +30,7 @@ code {
 }
 
 @media (display-mode: fullscreen) {
-  body {
+  .playing {
     overscroll-behavior: none;
   }
 }

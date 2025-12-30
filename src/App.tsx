@@ -87,6 +87,15 @@ function App() {
     }
   }, [nextBeep, beep, buzz, isPlaying])
 
+  React.useEffect(() => {
+    if (isPlaying)
+    {
+      document.body.classList.add('playing')
+    } else {
+      document.body.classList.remove('playing')
+    }
+  }, [isPlaying])
+
   return (
     <div 
       className="App">
