@@ -29,8 +29,6 @@ code {
   }
 }
 
-@media (display-mode: fullscreen) {
-  .playing {
-    overscroll-behavior: none;
-  }
+.playing {
+  overscroll-behavior: none;
 }
