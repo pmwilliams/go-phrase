@@ -10,7 +10,7 @@ button {
 
 .startButton,
 .stopButton {
-  height: 15dvh;
+  height: 18dvh;
   aspect-ratio: 1;
   border-radius: 50%;
   display: grid;
@@ -44,7 +44,7 @@ button {
 }
 
 .nextButton {
-  height: 15dvh;
+  height: 18dvh;
   aspect-ratio: 1;
   border-radius: 50%;
   display: grid;

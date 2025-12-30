@@ -8,7 +8,6 @@ body {
   background-color: black;
   min-height: 100dvh;
   overflow: hidden;
-  overscroll-behavior: none;
 }
 
 code {
@@ -22,4 +21,16 @@ code {
   align-items: center;
   justify-content: space-around;
   min-height: 100dvh;
+}
+
+@media (orientation: landscape) {
+  .App {
+    flex-direction: row;
+  }
+}
+
+@media (display-mode: fullscreen) {
+  body {
+    overscroll-behavior: none;
+  }
 }
