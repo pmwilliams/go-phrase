@@ -1,5 +1,6 @@
 export const words = [
    "Spotted dick",
+   "Extra virgin olive oil",
    "deprive",
    "Yorkshire pudding",
    "competence",
