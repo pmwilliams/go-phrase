@@ -8,7 +8,8 @@
   min-height:3.0em;
   vertical-align: middle;
   border: none;
-  border-bottom: 2px solid rgb(56, 155, 134);
+  border-bottom: 2px solid rgb(150, 176, 171);
+  text-transform: lowercase;
 }
 
 .word span {
@@ -26,7 +27,7 @@
 
 .word {
   background-color: rgba(21, 110, 90, 0);
-  color: rgba(21, 110, 90, 1);
+  color: rgb(150, 176, 171);
 }
 
 .word.hidden span {
