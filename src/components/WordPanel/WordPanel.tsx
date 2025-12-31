@@ -19,7 +19,7 @@ export function WordPanel({
     setShowWord(true)
 
     revealTimeout.current && clearTimeout(revealTimeout.current)
-    revealTimeout.current = setTimeout(() => setShowWord(false), 2000)
+    revealTimeout.current = setTimeout(() => setShowWord(false), 3000)
   }
 
   React.useEffect(() => reveal(), [word])
